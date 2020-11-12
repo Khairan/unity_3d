@@ -39,7 +39,6 @@ namespace Hosthell
         private void GoToPlayer()
         {
             _navMeshAgent.SetDestination(_target.position);
-            //transform.LookAt(_target.transform);
         }
 
         public void Hurt(int damage)
