@@ -21,14 +21,10 @@ namespace Hosthell
         private NavMeshAgent _navMeshAgent;
         private AudioSource _audioSource;
         private RaycastHit _hit;
-
-        private Vector3 _startRaycastPosition;
-        private Vector3 _directionToTarget;
-
+        
         public float _curentChaseTime = 0.0f;
         private float _startOffset = 0.5f;
         
-        private bool _rayCast;
         public bool _isChasing;
 
         #endregion
@@ -67,20 +63,17 @@ namespace Hosthell
 
         private void UseRayCast()
         {
-            var color = Color.red;
-            _startRaycastPosition = CalculateOffset(transform.position);
-            _directionToTarget = CalculateOffset(_target.position) - _startRaycastPosition;
+            var _startRaycastPosition = CalculateOffset(transform.position);
+            var _directionToTarget = CalculateOffset(_target.position) - _startRaycastPosition;
 
-            _rayCast = Physics.Raycast(_startRaycastPosition, _directionToTarget, out _hit, _visionDistance, _mask);
+            var _rayCast = Physics.Raycast(_startRaycastPosition, _directionToTarget, out _hit, _visionDistance, _mask);
 
             if (_rayCast)
             {
                 if (_hit.collider.gameObject.CompareTag("Player"))
                 {
-                    color = Color.green;
                     _isChasing = true;
                     ChasePlayer();
-                    Debug.DrawRay(_startRaycastPosition, _directionToTarget, color);
                 }
                 else if (_isChasing)
                 {
