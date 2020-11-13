@@ -9,12 +9,22 @@ namespace Hosthell
 
         [SerializeField] private GameObject _bullet;
         [SerializeField] private Transform _bulletPosition;
-        [SerializeField] private float _fireRate = 1;
+        [SerializeField] private LayerMask _mask;
+        
+        [SerializeField] private float _fireRate = 1.0f;
+        [SerializeField] private float _visionDistance = 8.0f;
 
-        private GameObject _target;
+        private AudioSource _audioSource;
+        private Transform _target;
+        private RaycastHit _hit;
+        
+        private Vector3 _startRaycastPosition;
+        private Vector3 _directionToTarget;
 
-        private float _curentFireRate = 0f;
+        private float _curentFireRate = 0.0f;
+        private float _startOffset = 0.5f;
 
+        private bool _rayCast;
 
         #endregion
 
@@ -22,15 +32,13 @@ namespace Hosthell
 
         private void Start()
         {
-            _target = GameObject.FindGameObjectWithTag("Player");
+            _target = GameObject.FindGameObjectWithTag("Player").transform;
+            _audioSource = GetComponent<AudioSource>();
         }
-
-        private void OnTriggerStay(Collider other)
+        
+        private void FixedUpdate()
         {
-            if (other.gameObject.CompareTag("Player"))
-            {
-                ShootAtPlayer();
-            }
+            UseRayCast();
         }
 
         #endregion
@@ -38,16 +46,38 @@ namespace Hosthell
 
         #region Methods
 
+        private void UseRayCast()
+        {
+            _startRaycastPosition = CalculateOffset(transform.position);
+            _directionToTarget = CalculateOffset(_target.position) - _startRaycastPosition;
+
+            _rayCast = Physics.Raycast(_startRaycastPosition, _directionToTarget, out _hit, _visionDistance, _mask);
+
+            if (_rayCast)
+            {
+                if (_hit.collider.gameObject.CompareTag("Player"))
+                {
+                    ShootAtPlayer();
+                }
+            }
+        }
+
+        private Vector3 CalculateOffset(Vector3 position)
+        {
+            position.y += _startOffset;
+            return position;
+        }
+
         private void ShootAtPlayer()
         {
-            transform.parent.LookAt(_target.transform);
-            _curentFireRate += Time.deltaTime;
+            transform.LookAt(_target);
+            _curentFireRate += Time.fixedDeltaTime;
             if (_curentFireRate > _fireRate)
             {
+                _audioSource.Play();
                 Instantiate(_bullet, _bulletPosition.position, _bulletPosition.rotation);
-                _curentFireRate = 0f;
+                _curentFireRate = 0.0f;
             }
-
         }
         
         #endregion

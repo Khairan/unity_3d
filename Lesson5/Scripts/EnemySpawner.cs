@@ -34,7 +34,9 @@ namespace Hosthell
                 var enemy = _enemyPrefabs[Random.Range(0, _enemyPrefabs.Length)];
                 var spawnPoint = _spawnPoints[i];
 
-                Instantiate(enemy, spawnPoint.position, spawnPoint.rotation);
+                var currentEnemy = Instantiate(enemy, spawnPoint.position, spawnPoint.rotation);
+                currentEnemy.GetComponent<EnemyController>().SetSpawnPoint(spawnPoint);
+
             }
         }
 

@@ -8,15 +8,15 @@ namespace Hosthell
         #region Fields
 
         [SerializeField] private AudioClip _deathSound;
-        [SerializeField] private float _speed = 5f;
-        [SerializeField] private float _jumpImpulse = 150f;
+        [SerializeField] private float _speed = 5.0f;
+        [SerializeField] private float _jumpImpulse = 200.0f;
         [SerializeField] private int _health = 10;
 
-        private Rigidbody _player;
+        private Rigidbody _rigidbody;
         private Vector3 _moveDirection;
         private AudioSource _audioSource;
         private bool _isAlive = true;
-        private bool _isJump = false;
+        private bool _canJump = false;
 
         #endregion
 
@@ -26,12 +26,15 @@ namespace Hosthell
         private void Start()
         {
             _audioSource = GetComponent<AudioSource>();
-            _player = GetComponent<Rigidbody>();
+            _rigidbody = GetComponent<Rigidbody>();
         }
 
-        private void OnCollisionEnter()
+        private void OnCollisionEnter(Collision collision)
         {
-            _isJump = false;
+            if (collision.gameObject.CompareTag("Ground"))
+            {
+                _canJump = true;
+            }
         }
         
         private void Update()
@@ -49,21 +52,22 @@ namespace Hosthell
         {
             _moveDirection.x = Input.GetAxis("Horizontal");
             _moveDirection.z = Input.GetAxis("Vertical");
-                        
+            _moveDirection.Normalize();
+
             var movementDirection = _moveDirection * _speed * Time.deltaTime;
 
             transform.LookAt(movementDirection + transform.position);
-            _player.AddForce(movementDirection, ForceMode.Impulse);
+            _rigidbody.AddForce(movementDirection, ForceMode.Impulse);
         }
 
         private void Jump()
         {
-            if (Input.GetButtonDown("Jump") && !_isJump)
+            if (Input.GetButtonDown("Jump") && _canJump)
             {
-                _isJump = true;
+                _canJump = false;
 
-                var impulse = transform.up * _jumpImpulse * Time.deltaTime;
-                _player.AddForce(impulse, ForceMode.Impulse);
+                var impulse = transform.up * _jumpImpulse * _rigidbody.mass;
+                _rigidbody.AddForce(impulse, ForceMode.Impulse);
             }
             
         }
