@@ -47,7 +47,22 @@ namespace Hosthell
 
 
         #region Methods
-                
+
+        public void Heal(int healPoints)
+        {
+            _health += healPoints;
+        }
+
+        public void Hurt(int damage)
+        {
+            _health -= damage; ;
+
+            if (_health <= 0 && _isAlive)
+            {
+                Die();
+            }
+        }
+
         private void Move()
         {
             _moveDirection.x = Input.GetAxis("Horizontal");
@@ -70,21 +85,6 @@ namespace Hosthell
                 _rigidbody.AddForce(impulse, ForceMode.Impulse);
             }
             
-        }
-
-        public void Heal(int healPoints)
-        {
-            _health += healPoints;
-        }
-
-        public void Hurt(int damage)
-        {
-            _health -= damage; ;
-
-            if (_health <= 0 && _isAlive)
-            {
-                Die();
-            }
         }
 
         private void Die()

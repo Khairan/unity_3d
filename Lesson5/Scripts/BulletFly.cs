@@ -3,7 +3,7 @@
 
 namespace Hosthell
 {
-    public class BulletFly : MonoBehaviour
+    public sealed class BulletFly : MonoBehaviour
     {
         #region Fields
 
@@ -18,7 +18,7 @@ namespace Hosthell
 
         #region UnityMethods
 
-        void Start()
+        private void Start()
         {
             _rigidbody = GetComponent<Rigidbody>();
         }

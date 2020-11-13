@@ -21,11 +21,11 @@ namespace Hosthell
         private NavMeshAgent _navMeshAgent;
         private AudioSource _audioSource;
         private RaycastHit _hit;
-        
-        public float _curentChaseTime = 0.0f;
+
+        private float _curentChaseTime = 0.0f;
         private float _startOffset = 0.5f;
-        
-        public bool _isChasing;
+
+        private bool _isChasing;
 
         #endregion
 
@@ -59,6 +59,16 @@ namespace Hosthell
         public void SetSpawnPoint(Transform spawnPoint)
         {
             _spawnPoint = spawnPoint;
+        }
+
+        public void Hurt(int damage)
+        {
+            _health -= damage; ;
+
+            if (_health <= 0)
+            {
+                Die();
+            }
         }
 
         private void UseRayCast()
@@ -116,17 +126,7 @@ namespace Hosthell
             _navMeshAgent.SetDestination(_spawnPoint.position);
             _curentChaseTime = 0.0f;
         }
-        
-        public void Hurt(int damage)
-        {
-            _health -= damage; ;
-
-            if (_health <= 0)
-            {
-                Die();
-            }
-        }
-
+                
         private void Die()
         {
             _audioSource.PlayOneShot(_deathSound);
