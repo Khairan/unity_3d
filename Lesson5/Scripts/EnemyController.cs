@@ -116,7 +116,7 @@ namespace Hosthell
             _navMeshAgent.SetDestination(_spawnPoint.position);
             _curentChaseTime = 0.0f;
         }
-
+        
         public void Hurt(int damage)
         {
             _health -= damage; ;

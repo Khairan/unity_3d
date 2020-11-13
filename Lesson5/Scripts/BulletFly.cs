@@ -42,7 +42,7 @@ namespace Hosthell
         {
             Destroy(gameObject, _lifeTime);
             
-            var impulse = transform.up * _force * _rigidbody.mass * Time.deltaTime;
+            var impulse = transform.up * _force * _rigidbody.mass;
             _rigidbody.AddForce(impulse, ForceMode.Impulse);
 
         }
