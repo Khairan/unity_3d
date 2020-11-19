@@ -25,6 +25,7 @@ namespace Hosthell
 
         private bool _isAlive = true;
         private bool _canJump = false;
+        private bool _jumpKeyPressed = false;
 
         #endregion
 
@@ -80,6 +81,11 @@ namespace Hosthell
             {
                 _currentSpeed = _walkSpeed;
             }
+
+            if (Input.GetButtonDown("Jump") && _canJump)
+            {
+                _jumpKeyPressed = true;
+            }
         }
 
         private void Walk()
@@ -94,21 +100,16 @@ namespace Hosthell
 
         private void Jump()
         {
-            if (Input.GetButtonDown("Jump") && _canJump)
+            if (_jumpKeyPressed && _canJump)
             {
                 _canJump = false;
+                _jumpKeyPressed = false;
 
                 var impulse = transform.up * _jumpImpulse * _rigidbody.mass * Time.fixedDeltaTime;
                 _rigidbody.AddForce(impulse, ForceMode.Impulse);
             }
-            
         }
-
-        public float GetJohnLemonSpeed()
-        {
-            return _rigidbody.velocity.magnitude;
-        }
-
+        
         public void Heal(int healPoints)
         {
             _health += healPoints;

@@ -129,7 +129,7 @@ namespace Hosthell
                 
         private void Die()
         {
-            //_audioSource.PlayOneShot(_deathSound);
+            AudioSource.PlayClipAtPoint(_deathSound, transform.position);
             Destroy(gameObject);
         }
 
