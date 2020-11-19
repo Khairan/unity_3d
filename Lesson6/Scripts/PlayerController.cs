@@ -6,9 +6,9 @@ namespace Hosthell
     public sealed class PlayerController : MonoBehaviour
     {
         #region Fields
-
-        [SerializeField] private AudioClip _deathSound;
         
+        [SerializeField] private GameEnding _gameEnding;
+
         [SerializeField] private float _walkSpeed = 100.0f;
         [SerializeField] private float _runSpeed = 200.0f;
         [SerializeField] private float _rotatationSpeed = 10.0f;
@@ -23,7 +23,7 @@ namespace Hosthell
 
         private float _currentSpeed;
 
-        private bool _isAlive = true;
+        private bool _goldenKey = false;
         private bool _canJump = false;
         private bool _jumpKeyPressed = false;
 
@@ -69,10 +69,10 @@ namespace Hosthell
             _moveDirection.x = Input.GetAxis("Horizontal");
             _moveDirection.z = Input.GetAxis("Vertical");
             _moveDirection.Normalize();
-            
+
             var desiredRotation = Vector3.RotateTowards(transform.forward, _moveDirection, _rotatationSpeed * Time.deltaTime, 0f);
             transform.rotation = Quaternion.LookRotation(desiredRotation);
-
+            
             if (Input.GetKey(KeyCode.LeftShift))
             {
                 _currentSpeed = _runSpeed;
@@ -119,7 +119,7 @@ namespace Hosthell
         {
             _health -= damage; ;
 
-            if (_health <= 0 && _isAlive)
+            if (_health <= 0)
             {
                 Die();
             }
@@ -127,14 +127,13 @@ namespace Hosthell
 
         private void Die()
         {
-            _audioSource.PlayOneShot(_deathSound);
+            _gameEnding.CaughtPlayer();
+        }
 
-            _walkSpeed = 0f;
-            _runSpeed = 0f;
-            _jumpImpulse = 0f;
-            _rotatationSpeed = 0f;
-
-            _isAlive = false;
+        public bool GoldenKey
+        {
+            get { return _goldenKey; }
+            set { _goldenKey = value; }
         }
 
         #endregion

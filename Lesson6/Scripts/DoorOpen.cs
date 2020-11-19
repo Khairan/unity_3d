@@ -25,7 +25,17 @@ namespace Hosthell
 
         private void OnCollisionEnter(Collision collision)
         {
-            HideDoor();
+            var collider = collision.collider;
+
+            if (collider.CompareTag("Player"))
+            {
+                if (gameObject.CompareTag("GoldenDoor"))
+                {
+                    if (collider.GetComponent<PlayerController>().GoldenKey)
+                        HideDoor();
+                }
+                else HideDoor();
+            }
         }
 
         private void HideDoor()
