@@ -8,8 +8,7 @@ namespace Hosthell
         #region Fields
 
         private AudioSource _audioSource;
-        private BoxCollider _boxCollider;
-        private MeshRenderer _meshRenderer;
+        private Animator _animator;
 
         #endregion
 
@@ -19,8 +18,7 @@ namespace Hosthell
         void Start()
         {
             _audioSource = GetComponent<AudioSource>();
-            _boxCollider = GetComponent<BoxCollider>();
-            _meshRenderer = GetComponent<MeshRenderer>();
+            _animator = GetComponent<Animator>();
         }
 
         private void OnCollisionEnter(Collision collision)
@@ -41,8 +39,7 @@ namespace Hosthell
         private void HideDoor()
         {
             _audioSource.Play();
-            _boxCollider.enabled = false;
-            _meshRenderer.enabled = false;
+            _animator.SetBool("Open", true);
         }
 
         #endregion
