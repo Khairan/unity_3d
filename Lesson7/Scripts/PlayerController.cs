@@ -8,6 +8,10 @@ namespace Hosthell
         #region Fields
         
         [SerializeField] private GameEnd _gameEnd;
+        [SerializeField] private Canvas _pauseMenu;
+        [SerializeField] private GameObject _bullet;
+        [SerializeField] private Transform _bulletPosition;
+        [SerializeField] private AudioClip _shootSound;
 
         [SerializeField] private float _walkSpeed = 100.0f;
         [SerializeField] private float _runSpeed = 200.0f;
@@ -37,6 +41,7 @@ namespace Hosthell
             _audioSource = GetComponent<AudioSource>();
             _rigidbody = GetComponent<Rigidbody>();
             _animator = GetComponent<Animator>();
+            _pauseMenu.enabled = false;
         }
 
         private void OnCollisionEnter(Collision collision)
@@ -66,6 +71,18 @@ namespace Hosthell
         
         private void GetInput()
         {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                _pauseMenu.enabled = !_pauseMenu.enabled;
+                if (_pauseMenu.enabled) Time.timeScale = 0;
+                else Time.timeScale = 1;
+            }
+
+            if (_pauseMenu.enabled)
+            {
+                return;
+            }
+
             _moveDirection.x = Input.GetAxis("Horizontal");
             _moveDirection.z = Input.GetAxis("Vertical");
             _moveDirection.Normalize();
@@ -86,6 +103,17 @@ namespace Hosthell
             {
                 _jumpKeyPressed = true;
             }
+
+            if (Input.GetButtonDown("Fire1"))
+            {
+                ShootBullet();
+            }
+        }
+
+        private void ShootBullet()
+        {
+            _audioSource.PlayOneShot(_shootSound);
+            Instantiate(_bullet, _bulletPosition.position, _bulletPosition.rotation);
         }
 
         private void Walk()
