@@ -6,20 +6,6 @@ namespace Hosthell
 {
     public sealed class MenuController : MonoBehaviour
     {
-        #region UnityMethods
-        
-        void Start()
-        {
-
-        }
-
-        void Update()
-        {
-
-        }
-
-        #endregion
-
         #region Methods
 
         public void LoadLevel(string levelName)

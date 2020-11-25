@@ -7,7 +7,7 @@ namespace Hosthell
     {
         #region Fields
         
-        [SerializeField] private GameEnding _gameEnding;
+        [SerializeField] private GameEnd _gameEnd;
 
         [SerializeField] private float _walkSpeed = 100.0f;
         [SerializeField] private float _runSpeed = 200.0f;
@@ -127,7 +127,7 @@ namespace Hosthell
 
         private void Die()
         {
-            _gameEnding.CaughtPlayer();
+            _gameEnd.CaughtPlayer();
         }
 
         public bool GoldenKey
