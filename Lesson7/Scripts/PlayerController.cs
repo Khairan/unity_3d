@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 
 namespace Hosthell
@@ -9,6 +10,7 @@ namespace Hosthell
         
         [SerializeField] private GameEnd _gameEnd;
         [SerializeField] private Canvas _pauseMenu;
+        [SerializeField] private Image _HealthBar;
         [SerializeField] private GameObject _bullet;
         [SerializeField] private Transform _bulletPosition;
         [SerializeField] private AudioClip _shootSound;
@@ -26,6 +28,7 @@ namespace Hosthell
         private Animator _animator;
 
         private float _currentSpeed;
+        private int _maxhealth;
 
         private bool _goldenKey = false;
         private bool _canJump = false;
@@ -41,6 +44,8 @@ namespace Hosthell
             _audioSource = GetComponent<AudioSource>();
             _rigidbody = GetComponent<Rigidbody>();
             _animator = GetComponent<Animator>();
+
+            _maxhealth = _health;
             _pauseMenu.enabled = false;
         }
 
@@ -56,6 +61,7 @@ namespace Hosthell
         {
             GetInput();
             _animator.SetFloat("Speed", _rigidbody.velocity.magnitude);
+            ShowHealthPoints();
         }
 
         private void FixedUpdate()
@@ -73,15 +79,10 @@ namespace Hosthell
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                _pauseMenu.enabled = !_pauseMenu.enabled;
-                if (_pauseMenu.enabled) Time.timeScale = 0;
-                else Time.timeScale = 1;
+                SetPause();
             }
 
-            if (_pauseMenu.enabled)
-            {
-                return;
-            }
+            if (_pauseMenu.enabled) return;
 
             _moveDirection.x = Input.GetAxis("Horizontal");
             _moveDirection.z = Input.GetAxis("Vertical");
@@ -107,6 +108,21 @@ namespace Hosthell
             if (Input.GetButtonDown("Fire1"))
             {
                 ShootBullet();
+            }
+        }
+
+        private void SetPause()
+        {
+            _pauseMenu.enabled = !_pauseMenu.enabled;
+            if (_pauseMenu.enabled)
+            {
+                Time.timeScale = 0;
+                AudioListener.pause = true;
+            }
+            else
+            {
+                Time.timeScale = 1;
+                AudioListener.pause = false;
             }
         }
 
@@ -138,6 +154,13 @@ namespace Hosthell
             }
         }
         
+        private void ShowHealthPoints()
+        {
+            if (_health > _maxhealth) _maxhealth = _health;
+            _HealthBar.fillAmount = (float)_health / _maxhealth;
+            _HealthBar.GetComponentInChildren<Text>().text = _health.ToString();
+        }
+
         public void Heal(int healPoints)
         {
             _health += healPoints;

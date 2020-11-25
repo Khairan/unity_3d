@@ -36,6 +36,7 @@ namespace Hosthell
             _target = GameObject.FindGameObjectWithTag("Player").transform;
             _navMeshAgent = GetComponent<NavMeshAgent>();
             _audioSource = GetComponent<AudioSource>();
+            if (_spawnPoint == null) _spawnPoint = transform;
         }
         
         private void FixedUpdate()
