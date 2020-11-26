@@ -10,6 +10,7 @@ namespace Hosthell
 
         [SerializeField] private AudioClip _deathSound;
         [SerializeField] private LayerMask _mask;
+        [SerializeField] private GameEnd _gameEnd;
 
         [SerializeField] private float _chaseTime = 2.0f;
         [SerializeField] private float _visionDistance = 5.0f;
@@ -131,6 +132,7 @@ namespace Hosthell
         {
             AudioSource.PlayClipAtPoint(_deathSound, transform.position, _deathSoundVolume);
             Destroy(gameObject);
+            if (gameObject.name == "BigBoss") _gameEnd.PlayerWin();
         }
 
         #endregion

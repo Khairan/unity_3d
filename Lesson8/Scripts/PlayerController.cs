@@ -181,7 +181,7 @@ namespace Hosthell
 
         private void Die()
         {
-            _gameEnd.CaughtPlayer();
+            _gameEnd.PlayerDead();
         }
 
         public bool GoldenKey

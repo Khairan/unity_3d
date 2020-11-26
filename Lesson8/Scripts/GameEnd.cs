@@ -22,8 +22,8 @@ namespace Hosthell
 
         private float _timer;
 
-        private bool _isPlayerAtExit;
-        private bool _isPlayerCaught;
+        private bool _isPlayerWin;
+        private bool _isPlayerDead;
         private bool _hasAudioPlayed;
 
         #endregion
@@ -33,11 +33,11 @@ namespace Hosthell
 
         private void Update()
         {
-            if (_isPlayerAtExit)
+            if (_isPlayerWin)
             {
                 EndLevel(_exitBackgroundImageCanvasGroup, false, _exitAudio);
             }
-            else if (_isPlayerCaught)
+            else if (_isPlayerDead)
             {
                 EndLevel(_caughtBackgroundImageCanvasGroup, true, _caughtAudio);
             }
@@ -47,7 +47,7 @@ namespace Hosthell
         {
             if (other.gameObject == _player)
             {
-                _isPlayerAtExit = true;
+                _isPlayerWin = true;
             }
         }
 
@@ -56,9 +56,14 @@ namespace Hosthell
 
         #region Methods
 
-        public void CaughtPlayer()
+        public void PlayerWin()
         {
-            _isPlayerCaught = true;
+            _isPlayerWin = true;
+        }
+
+        public void PlayerDead()
+        {
+            _isPlayerDead = true;
         }
 
         private void EndLevel(CanvasGroup imageCanvasGroup, bool doRestart, AudioSource audioSource)
