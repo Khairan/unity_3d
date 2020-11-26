@@ -19,11 +19,11 @@ namespace Hosthell
         private Transform _spawnPoint;
         private Transform _target;
         private NavMeshAgent _navMeshAgent;
-        private AudioSource _audioSource;
         private RaycastHit _hit;
 
         private float _curentChaseTime = 0.0f;
         private float _startOffset = 0.5f;
+        private float _deathSoundVolume = 0.2f;
 
         private bool _isChasing;
 
@@ -35,7 +35,6 @@ namespace Hosthell
         {
             _target = GameObject.FindGameObjectWithTag("Player").transform;
             _navMeshAgent = GetComponent<NavMeshAgent>();
-            _audioSource = GetComponent<AudioSource>();
             if (_spawnPoint == null) _spawnPoint = transform;
         }
         
@@ -130,7 +129,7 @@ namespace Hosthell
                 
         private void Die()
         {
-            AudioSource.PlayClipAtPoint(_deathSound, transform.position);
+            AudioSource.PlayClipAtPoint(_deathSound, transform.position, _deathSoundVolume);
             Destroy(gameObject);
         }
 

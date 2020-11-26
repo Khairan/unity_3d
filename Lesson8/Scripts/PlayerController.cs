@@ -140,6 +140,9 @@ namespace Hosthell
             var moveDirection = transform.forward * speed;
             moveDirection.y = _rigidbody.velocity.y;
             _rigidbody.velocity = moveDirection;
+
+            if (speed > 0 && !_audioSource.isPlaying) _audioSource.Play();
+            else if (speed == 0 && !_audioSource.isPlaying) _audioSource.Stop();
         }
 
         private void Jump()
